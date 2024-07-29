@@ -1,48 +1,54 @@
 #include <stdio.h>
-#include <conio.h>
-#include <math.h>
+#include <stdlib.h>
 
+// Function to find the maximum of two integers
 int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
-void warshal(int p[10][10], int n) {
+// Warshall's algorithm to find transitive closure
+void warshall(int p[10][10], int n) {
     int i, j, k;
-    for (k = 1; k <= n; k++)
-        for (i = 1; i <= n; i++)
-            for (j = 1; j <= n; j++)
+    for (k = 0; k < n; k++) {
+        for (i = 0; i < n; i++) {
+            for (j = 0; j < n; j++) {
                 p[i][j] = max(p[i][j], p[i][k] && p[k][j]);
+            }
+        }
+    }
 }
 
-void main() {
-    int p[10][10] = { 0 }, n, e, u, v, i, j;
+int main() {
+    int p[10][10] = {0}, n, e, u, v, i, j;
 
-    printf("\nEnter the number of vertices: ");
+    printf("Enter the number of vertices: ");
     scanf("%d", &n);
-    printf("\nEnter the number of edges: ");
+    printf("Enter the number of edges: ");
     scanf("%d", &e);
 
-    for (i = 1; i <= e; i++) {
-        printf("\nEnter the end vertices of edge %d: ", i);
+    for (i = 0; i < e; i++) {
+        printf("Enter the end vertices of edge %d: ", i + 1);
         scanf("%d%d", &u, &v);
         p[u][v] = 1;
     }
 
     printf("\nMatrix of input data:\n");
-    for (i = 1; i <= n; i++) {
-        for (j = 1; j <= n; j++)
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
             printf("%d\t", p[i][j]);
+        }
         printf("\n");
     }
 
-    warshal(p, n);
+    warshall(p, n);
 
     printf("\nTransitive closure:\n");
-    for (i = 1; i <= n; i++) {
-        for (j = 1; j <= n; j++)
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
             printf("%d\t", p[i][j]);
+        }
         printf("\n");
     }
 
-    getch();
+    return 0;
 }

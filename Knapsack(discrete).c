@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
 int knapSackRec(int W, int wt[], int val[], int index, int** dp) {
     if (index < 0)
         return 0;
@@ -11,9 +15,8 @@ int knapSackRec(int W, int wt[], int val[], int index, int** dp) {
         dp[index][W] = knapSackRec(W, wt, val, index - 1, dp);
         return dp[index][W];
     } else {
-        dp[index][W] = (val[index] + knapSackRec(W - wt[index], wt, val, index - 1, dp) > knapSackRec(W, wt, val, index - 1, dp)) 
-                       ? (val[index] + knapSackRec(W - wt[index], wt, val, index - 1, dp)) 
-                       : knapSackRec(W, wt, val, index - 1, dp);
+        dp[index][W] = max(val[index] + knapSackRec(W - wt[index], wt, val, index - 1, dp),
+                           knapSackRec(W, wt, val, index - 1, dp));
         return dp[index][W];
     }
 }
@@ -24,7 +27,7 @@ int knapSack(int W, int wt[], int val[], int n) {
         dp[i] = (int*)malloc((W + 1) * sizeof(int));
 
     for (int i = 0; i < n; i++)
-        for (int j = 0; j <= W; j++)
+        for (int j = 0; j < W + 1; j++)
             dp[i][j] = -1;
 
     int result = knapSackRec(W, wt, val, n - 1, dp);
@@ -41,6 +44,6 @@ int main() {
     int weight[] = { 10, 20, 30 };
     int W = 50;
     int n = sizeof(profit) / sizeof(profit[0]);
-    printf("%d\n", knapSack(W, weight, profit, n));
+    printf("Maximum profit is %d\n", knapSack(W, weight, profit, n));
     return 0;
 }
